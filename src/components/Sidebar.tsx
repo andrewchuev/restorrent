@@ -40,7 +40,7 @@ const Sidebar: Component<Props> = (props) => {
     <aside class="sidebar">
       <div class="sidebar-logo">
         <LogoIcon class="sidebar-logo-mark" size={28} />
-        <span class="sidebar-logo-text">rTorrent</span>
+        <span class="sidebar-logo-text">resTorrent</span>
       </div>
 
       <nav class="sidebar-nav">

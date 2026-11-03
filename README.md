@@ -1,8 +1,8 @@
-# rTorrent
+# resTorrent
 
 A lightweight, cross-platform BitTorrent client built with **Rust + Tauri 2** and a **SolidJS** frontend.
 
-[![Download](https://img.shields.io/github/v/release/andrewchuev/rtorrent?label=Download&style=for-the-badge&color=2563eb&labelColor=333333)](https://github.com/andrewchuev/rtorrent/releases/latest)
+[![Download](https://img.shields.io/github/v/release/andrewchuev/restorrent?label=Download&style=for-the-badge&color=2563eb&labelColor=333333)](https://github.com/andrewchuev/restorrent/releases/latest)
 
 ---
 
@@ -27,7 +27,7 @@ A lightweight, cross-platform BitTorrent client built with **Rust + Tauri 2** an
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/main-light.png">
-    <img src="docs/screenshots/main-dark.png" alt="rTorrent main window with downloads and seeding torrents" width="900">
+    <img src="docs/screenshots/main-dark.png" alt="resTorrent main window with downloads and seeding torrents" width="900">
   </picture>
 </p>
 
@@ -45,20 +45,20 @@ A lightweight, cross-platform BitTorrent client built with **Rust + Tauri 2** an
 
 ## Installation
 
-Download the latest release for your platform from the [Releases](https://github.com/andrewchuev/rtorrent/releases) page:
+Download the latest release for your platform from the [Releases](https://github.com/andrewchuev/restorrent/releases) page:
 
 | Platform | File |
 |----------|------|
-| Windows  | `rTorrent_x.x.x_x64-setup.exe` or `.msi` |
-| macOS    | `rTorrent_x.x.x_universal.dmg` (Intel + Apple Silicon) |
-| Linux    | `rTorrent_x.x.x_amd64.AppImage` or `.deb` |
+| Windows  | `resTorrent_x.x.x_x64-setup.exe` or `.msi` |
+| macOS    | `resTorrent_x.x.x_universal.dmg` (Intel + Apple Silicon) |
+| Linux    | `resTorrent_x.x.x_amd64.AppImage` or `.deb` |
 
 ### Notes
 
 - **macOS:** If you see *"unidentified developer"* — right-click the `.app` → **Open**.
 - **Windows:** SmartScreen may warn about an unknown publisher — click **More info → Run anyway**.
-- **Linux AppImage:** `chmod +x rTorrent_*.AppImage && ./rTorrent_*.AppImage`
-- **Opening `.torrent` files (Windows):** the installer registers rTorrent as a handler, but Windows 11 keeps your current default. Once, right-click a `.torrent` → **Open with → Choose another app → rTorrent → Always**. If the app is already running (even in the tray), the file is passed to it instead of starting a second copy.
+- **Linux AppImage:** `chmod +x resTorrent_*.AppImage && ./resTorrent_*.AppImage`
+- **Opening `.torrent` files (Windows):** the installer registers resTorrent as a handler, but Windows 11 keeps your current default. Once, right-click a `.torrent` → **Open with → Choose another app → resTorrent → Always**. If the app is already running (even in the tray), the file is passed to it instead of starting a second copy.
 
 ---
 
@@ -95,8 +95,8 @@ Download the latest release for your platform from the [Releases](https://github
 ### Run in development
 
 ```bash
-git clone https://github.com/andrewchuev/rtorrent.git
-cd rtorrent
+git clone https://github.com/andrewchuev/restorrent.git
+cd restorrent
 npm install
 npm run tauri dev
 ```
@@ -127,7 +127,7 @@ The workflow publishes a GitHub Release with all platform installers attached. R
 ## Project Structure
 
 ```
-rtorrent/
+restorrent/
 ├── src/                        # SolidJS frontend
 │   ├── App.tsx                 # Root component, layout, drag-drop, sorting, add-torrent pipeline
 │   ├── lib/

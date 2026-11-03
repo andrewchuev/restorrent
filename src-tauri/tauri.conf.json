@@ -1,5 +1,5 @@
 {
-  "productName": "rTorrent",
+  "productName": "resTorrent",
   "version": "0.1.12",
   "identifier": "com.andrewchuev.rtorrent",
   "build": {
@@ -12,7 +12,7 @@
     "withGlobalTauri": false,
     "windows": [
       {
-        "title": "rTorrent",
+        "title": "resTorrent",
         "width": 1100,
         "height": 700,
         "minWidth": 800,
@@ -37,7 +37,7 @@
     ],
     "publisher": "Andrew A. Chuev",
     "copyright": "Copyright © 2026 Andrew A. Chuev",
-    "homepage": "https://github.com/andrewchuev/rtorrent",
+    "homepage": "https://github.com/andrewchuev/restorrent",
     "shortDescription": "Lightweight cross-platform BitTorrent client",
     "longDescription": "A fast and lightweight BitTorrent client built with Rust and Tauri. Supports magnet links, .torrent files, DHT, and system tray integration.",
     "category": "Utility",
