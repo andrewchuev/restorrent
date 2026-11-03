@@ -1,5 +1,6 @@
 import { Component, createSignal, onMount, Show } from "solid-js";
 import { open } from "@tauri-apps/plugin-dialog";
+import { disable, enable, isEnabled } from "@tauri-apps/plugin-autostart";
 import { AppSettings, getSettings, saveSettings } from "../lib/commands";
 
 interface Props {
@@ -11,12 +12,23 @@ const Settings: Component<Props> = (props) => {
   const [saving, setSaving] = createSignal(false);
   const [saved, setSaved] = createSignal(false);
   const [error, setError] = createSignal("");
+  // Autostart lives in the OS (registry / launch agent), not in settings.toml, so it is
+  // tracked separately and only written on Save when it actually changed.
+  const [autostart, setAutostart] = createSignal(false);
+  const [autostartInitial, setAutostartInitial] = createSignal(false);
 
   onMount(async () => {
     try {
       setSettings(await getSettings());
     } catch (e) {
       setError(String(e));
+    }
+    try {
+      const on = await isEnabled();
+      setAutostart(on);
+      setAutostartInitial(on);
+    } catch {
+      // Unsupported platform: keep the toggle off rather than blocking the dialog.
     }
   });
 
@@ -35,6 +47,10 @@ const Settings: Component<Props> = (props) => {
     setError("");
     try {
       await saveSettings(s);
+      if (autostart() !== autostartInitial()) {
+        await (autostart() ? enable() : disable());
+        setAutostartInitial(autostart());
+      }
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (e) {
@@ -131,6 +147,17 @@ const Settings: Component<Props> = (props) => {
 
             <div class="settings-group">
               <div class="settings-group-label">Startup</div>
+              <div class="settings-row settings-row-check">
+                <label class="settings-label">
+                  Launch at system startup <span class="settings-hint">starts in the tray</span>
+                </label>
+                <input
+                  type="checkbox"
+                  class="settings-checkbox"
+                  checked={autostart()}
+                  onChange={(e) => setAutostart(e.currentTarget.checked)}
+                />
+              </div>
               <div class="settings-row settings-row-check">
                 <label class="settings-label">Start minimized to tray</label>
                 <input

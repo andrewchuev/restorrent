@@ -13,6 +13,9 @@ use tauri::{AppHandle, Emitter, Manager};
 use tauri_plugin_notification::NotificationExt;
 use tracing::info;
 
+/// Passed by the OS autostart entry so the window can stay in the tray on login.
+const AUTOSTART_ARG: &str = "--autostart";
+
 const SHOW_LABEL: &str = "Show Window";
 const HIDE_LABEL: &str = "Hide Window";
 
@@ -59,6 +62,8 @@ pub fn run() {
     let download_dir = std::path::PathBuf::from(&settings.download_path);
     let start_minimized = settings.start_minimized;
 
+    let launched_by_autostart = std::env::args().any(|a| a == AUTOSTART_ARG);
+
     // Collect any .torrent path passed on the command line at startup
     let startup_torrent: Option<String> = std::env::args()
         .skip(1)
@@ -71,6 +76,10 @@ pub fn run() {
         // .torrent file, the OS launches a second process; the plugin kills that
         // second process and fires this callback in the *first* instance instead.
         .plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
+            // A login-time autostart racing a running instance must not pop the window up.
+            if argv.iter().any(|a| a == AUTOSTART_ARG) {
+                return;
+            }
             set_main_window_visible(app, true);
             if let Some(w) = app.get_webview_window("main") {
                 // Emit directly to the WebView window so the JS listener receives it.
@@ -83,6 +92,10 @@ pub fn run() {
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            Some(vec![AUTOSTART_ARG]),
+        ))
         .setup(move |app| {
             info!("Starting rtorrent v{}", app.package_info().version);
 
@@ -141,7 +154,7 @@ pub fn run() {
 
             // When a .torrent file is being opened at launch, keep the window
             // visible so the user sees the "already in list" notice if needed.
-            if start_minimized && startup_torrent.is_none() {
+            if (start_minimized || launched_by_autostart) && startup_torrent.is_none() {
                 set_main_window_visible(app.handle(), false);
             }
 

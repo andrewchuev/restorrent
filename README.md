@@ -16,7 +16,7 @@ A lightweight, cross-platform BitTorrent client built with **Rust + Tauri 2** an
 - **Multi-select** — Shift/Ctrl+click to select multiple torrents; bulk start/pause/stop/remove actions always available
 - **System tray** — runs in the background; hide to tray on close, left-click the tray icon to show or hide the window (the tray menu has a matching Show/Hide Window item and Quit)
 - **Download-complete notifications** — desktop notification when a torrent finishes
-- **Settings** — configurable download folder, speed limits, and startup behavior (persisted to TOML)
+- **Settings** — configurable download folder, speed limits, and startup behavior (launch with the system, start minimized to the tray). App settings are persisted to TOML; the autostart entry itself lives in the OS (registry on Windows, launch agent on macOS, `.desktop` file on Linux)
 - **Sort, zoom & theme** — sort by name, status, progress, speed or size; UI zoom via Ctrl +/−/0; dark/light theme toggle
 - **DHT** — decentralised peer discovery, no tracker required for magnet links
 
