@@ -59,11 +59,6 @@ pub fn run() {
     let download_dir = std::path::PathBuf::from(&settings.download_path);
     let start_minimized = settings.start_minimized;
 
-    // Initialize TorrentManager on the Tauri async runtime so that the librqbit
-    // session's internal tasks share the same runtime for the lifetime of the app.
-    let manager = tauri::async_runtime::block_on(TorrentManager::new(download_dir))
-        .expect("Failed to initialize torrent engine");
-
     // Collect any .torrent path passed on the command line at startup
     let startup_torrent: Option<String> = std::env::args()
         .skip(1)
@@ -88,9 +83,16 @@ pub fn run() {
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
-        .manage(manager)
         .setup(move |app| {
             info!("Starting rtorrent v{}", app.package_info().version);
+
+            // The engine must start here, not before the builder: the single-instance
+            // plugin has already terminated a duplicate process by now, so a second
+            // launch (e.g. opening a .torrent in Explorer) never touches the shared
+            // DHT port or session store. block_on keeps the librqbit session's tasks on
+            // the Tauri async runtime for the lifetime of the app.
+            let manager = tauri::async_runtime::block_on(TorrentManager::new(download_dir))?;
+            app.manage(manager);
 
             // ── System tray ──────────────────────────────────────────────
             let toggle_item = MenuItem::with_id(app, "toggle", HIDE_LABEL, true, None::<&str>)?;
