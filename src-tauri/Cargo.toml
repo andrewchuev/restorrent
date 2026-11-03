@@ -38,6 +38,7 @@ anyhow = "1"
 chrono = { version = "0.4", features = ["serde"] }
 dirs-next = "2"
 toml = "0.8"
+tauri-plugin-autostart = "2.7"
 
 [features]
 default = ["custom-protocol"]
