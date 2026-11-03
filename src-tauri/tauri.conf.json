@@ -1,5 +1,5 @@
 {
-  "productName": "rtorrent",
+  "productName": "rTorrent",
   "version": "0.1.11",
   "identifier": "com.andrewchuev.rtorrent",
   "build": {
@@ -12,7 +12,7 @@
     "withGlobalTauri": false,
     "windows": [
       {
-        "title": "rtorrent",
+        "title": "rTorrent",
         "width": 1100,
         "height": 700,
         "minWidth": 800,

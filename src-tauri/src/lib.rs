@@ -108,7 +108,7 @@ pub fn run() {
                 .icon(icon)
                 .menu(&menu)
                 .show_menu_on_left_click(false)
-                .tooltip("rtorrent")
+                .tooltip("rTorrent")
                 .on_menu_event(|app, event| match event.id.as_ref() {
                     "toggle" => toggle_main_window(app),
                     "quit" => app.exit(0),

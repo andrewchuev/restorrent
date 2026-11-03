@@ -28,6 +28,30 @@ function svg(paths: () => JSX.Element) {
   return Icon;
 }
 
+// Full-colour app logo; keep in sync with src-tauri/icons/icon.svg.
+export const LogoIcon: IconComponent = (props) => (
+  <svg
+    width={props.size ?? 28}
+    height={props.size ?? 28}
+    viewBox="0 0 256 256"
+    class={props.class}
+    aria-hidden="true"
+  >
+    <rect width="256" height="256" rx="58" fill="#6366f1" />
+    <g
+      fill="none"
+      stroke="#ffffff"
+      stroke-width="32"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M128 48v108" />
+      <path d="M80 112l48 48 48-48" />
+      <path d="M68 204h120" />
+    </g>
+  </svg>
+);
+
 export const DownloadIcon = svg(() => (
   <>
     <path d="M12 3v12" />

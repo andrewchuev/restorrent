@@ -1,4 +1,4 @@
-# rtorrent
+# rTorrent
 
 A lightweight, cross-platform BitTorrent client built with **Rust + Tauri 2** and a **SolidJS** frontend.
 
@@ -34,16 +34,16 @@ Download the latest release for your platform from the [Releases](https://github
 
 | Platform | File |
 |----------|------|
-| Windows  | `rtorrent_x.x.x_x64-setup.exe` or `.msi` |
-| macOS    | `rtorrent_x.x.x_universal.dmg` (Intel + Apple Silicon) |
-| Linux    | `rtorrent_x.x.x_amd64.AppImage` or `.deb` |
+| Windows  | `rTorrent_x.x.x_x64-setup.exe` or `.msi` |
+| macOS    | `rTorrent_x.x.x_universal.dmg` (Intel + Apple Silicon) |
+| Linux    | `rTorrent_x.x.x_amd64.AppImage` or `.deb` |
 
 ### Notes
 
 - **macOS:** If you see *"unidentified developer"* — right-click the `.app` → **Open**.
 - **Windows:** SmartScreen may warn about an unknown publisher — click **More info → Run anyway**.
-- **Linux AppImage:** `chmod +x rtorrent_*.AppImage && ./rtorrent_*.AppImage`
-- **Opening `.torrent` files (Windows):** the installer registers rtorrent as a handler, but Windows 11 keeps your current default. Once, right-click a `.torrent` → **Open with → Choose another app → rtorrent → Always**. If the app is already running (even in the tray), the file is passed to it instead of starting a second copy.
+- **Linux AppImage:** `chmod +x rTorrent_*.AppImage && ./rTorrent_*.AppImage`
+- **Opening `.torrent` files (Windows):** the installer registers rTorrent as a handler, but Windows 11 keeps your current default. Once, right-click a `.torrent` → **Open with → Choose another app → rTorrent → Always**. If the app is already running (even in the tray), the file is passed to it instead of starting a second copy.
 
 ---
 

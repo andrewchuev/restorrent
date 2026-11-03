@@ -1,6 +1,6 @@
 import { Component, createMemo } from "solid-js";
 import { TorrentInfo } from "../lib/commands";
-import { ActivityIcon, DownloadIcon, UploadIcon, CheckCircleIcon, SettingsIcon } from "./Icons";
+import { ActivityIcon, DownloadIcon, UploadIcon, CheckCircleIcon, SettingsIcon, LogoIcon } from "./Icons";
 
 export type StatusFilter = "all" | "downloading" | "seeding" | "completed";
 
@@ -39,10 +39,8 @@ const Sidebar: Component<Props> = (props) => {
   return (
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <div class="sidebar-logo-mark">
-          <DownloadIcon size={16} />
-        </div>
-        <span class="sidebar-logo-text">rtorrent</span>
+        <LogoIcon class="sidebar-logo-mark" size={28} />
+        <span class="sidebar-logo-text">rTorrent</span>
       </div>
 
       <nav class="sidebar-nav">
