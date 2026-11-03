@@ -8,10 +8,43 @@ use std::collections::HashSet;
 
 use engine::{TorrentManager, TorrentState};
 use tauri::menu::{Menu, MenuItem};
-use tauri::tray::{MouseButton, TrayIconBuilder, TrayIconEvent};
-use tauri::{Emitter, Manager};
+use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
+use tauri::{AppHandle, Emitter, Manager};
 use tauri_plugin_notification::NotificationExt;
 use tracing::info;
+
+const SHOW_LABEL: &str = "Show Window";
+const HIDE_LABEL: &str = "Hide Window";
+
+/// Tray menu entry whose label mirrors the main window's visibility.
+struct TrayToggleItem(MenuItem<tauri::Wry>);
+
+fn set_main_window_visible(app: &AppHandle, visible: bool) {
+    if let Some(w) = app.get_webview_window("main") {
+        if visible {
+            let _ = w.unminimize();
+            let _ = w.show();
+            let _ = w.set_focus();
+        } else {
+            let _ = w.hide();
+        }
+    }
+    // The single-instance callback can fire before setup has registered the item.
+    if let Some(item) = app.try_state::<TrayToggleItem>() {
+        let _ = item
+            .0
+            .set_text(if visible { HIDE_LABEL } else { SHOW_LABEL });
+    }
+}
+
+fn toggle_main_window(app: &AppHandle) {
+    let Some(w) = app.get_webview_window("main") else {
+        return;
+    };
+    // A minimized window still reports visible; treat it as hidden so a click restores it.
+    let shown = w.is_visible().unwrap_or(false) && !w.is_minimized().unwrap_or(false);
+    set_main_window_visible(app, !shown);
+}
 
 pub fn run() {
     tracing_subscriber::fmt()
@@ -43,9 +76,8 @@ pub fn run() {
         // .torrent file, the OS launches a second process; the plugin kills that
         // second process and fires this callback in the *first* instance instead.
         .plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
+            set_main_window_visible(app, true);
             if let Some(w) = app.get_webview_window("main") {
-                let _ = w.show();
-                let _ = w.set_focus();
                 // Emit directly to the WebView window so the JS listener receives it.
                 // app.emit() targets the Rust event bus; w.emit() targets the webview.
                 if let Some(path) = argv.iter().find(|a| a.to_lowercase().ends_with(".torrent")) {
@@ -61,9 +93,10 @@ pub fn run() {
             info!("Starting rtorrent v{}", app.package_info().version);
 
             // ── System tray ──────────────────────────────────────────────
-            let show_item = MenuItem::with_id(app, "show", "Show Window", true, None::<&str>)?;
+            let toggle_item = MenuItem::with_id(app, "toggle", HIDE_LABEL, true, None::<&str>)?;
             let quit_item = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
-            let menu = Menu::with_items(app, &[&show_item, &quit_item])?;
+            let menu = Menu::with_items(app, &[&toggle_item, &quit_item])?;
+            app.manage(TrayToggleItem(toggle_item));
 
             let icon = app
                 .default_window_icon()
@@ -75,30 +108,19 @@ pub fn run() {
                 .show_menu_on_left_click(false)
                 .tooltip("rtorrent")
                 .on_menu_event(|app, event| match event.id.as_ref() {
-                    "show" => {
-                        if let Some(w) = app.get_webview_window("main") {
-                            let _ = w.show();
-                            let _ = w.set_focus();
-                        }
-                    }
+                    "toggle" => toggle_main_window(app),
                     "quit" => app.exit(0),
                     _ => {}
                 })
                 .on_tray_icon_event(|tray, event| {
-                    if let TrayIconEvent::DoubleClick {
+                    // Fire on button release only; Down would toggle twice per click.
+                    if let TrayIconEvent::Click {
                         button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
                         ..
                     } = event
                     {
-                        let app = tray.app_handle();
-                        if let Some(w) = app.get_webview_window("main") {
-                            if w.is_visible().unwrap_or(false) {
-                                let _ = w.hide();
-                            } else {
-                                let _ = w.show();
-                                let _ = w.set_focus();
-                            }
-                        }
+                        toggle_main_window(tray.app_handle());
                     }
                 })
                 .build(app)?;
@@ -111,16 +133,14 @@ pub fn run() {
             main_window.on_window_event(move |event| {
                 if let tauri::WindowEvent::CloseRequested { api, .. } = event {
                     api.prevent_close();
-                    let _ = win_clone.hide();
+                    set_main_window_visible(win_clone.app_handle(), false);
                 }
             });
 
             // When a .torrent file is being opened at launch, keep the window
             // visible so the user sees the "already in list" notice if needed.
             if start_minimized && startup_torrent.is_none() {
-                if let Some(w) = app.get_webview_window("main") {
-                    let _ = w.hide();
-                }
+                set_main_window_visible(app.handle(), false);
             }
 
             // ── Open .torrent passed at launch (file-association / argv) ──

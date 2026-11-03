@@ -13,7 +13,7 @@ A lightweight, cross-platform BitTorrent client built with **Rust + Tauri 2** an
 - **Real-time stats** — download/upload speed, progress, and peer count updated every second, with a live speed chart
 - **Resizable detail panel** — drag to resize, per-file progress bars, active peer list, and the speed chart for the selected torrent
 - **Multi-select** — Shift/Ctrl+click to select multiple torrents; bulk start/pause/stop/remove actions always available
-- **System tray** — runs in the background; hide to tray on close, re-open with a click or tray icon double-click
+- **System tray** — runs in the background; hide to tray on close, left-click the tray icon to show or hide the window (the tray menu has a matching Show/Hide Window item and Quit)
 - **Download-complete notifications** — desktop notification when a torrent finishes
 - **Settings** — configurable download folder, speed limits, and startup behavior (persisted to TOML)
 - **Sort, zoom & theme** — sort by name, status, progress, speed or size; UI zoom via Ctrl +/−/0; dark/light theme toggle
