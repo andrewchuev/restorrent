@@ -3,11 +3,11 @@ use std::path::PathBuf;
 use std::sync::{Arc, PoisonError, RwLock, RwLockReadGuard, RwLockWriteGuard};
 
 use librqbit::{
-    AddTorrent, AddTorrentOptions, AddTorrentResponse, Api, ManagedTorrent, Session,
-    SessionOptions, SessionPersistenceConfig, TorrentStats, TorrentStatsState,
+    AddTorrent, AddTorrentOptions, AddTorrentResponse, Api, DhtSessionConfig, ManagedTorrent,
+    Session, SessionOptions, SessionPersistenceConfig, TorrentStats, TorrentStatsState,
 };
 use serde::{Deserialize, Serialize};
-use tracing::info;
+use tracing::{info, warn};
 
 use crate::error::{AppError, Result};
 
@@ -226,14 +226,34 @@ pub struct TorrentManager {
 
 impl TorrentManager {
     pub async fn new(download_dir: PathBuf) -> anyhow::Result<Self> {
-        let session = Session::new_with_opts(
+        let session = match Session::new_with_opts(
             download_dir.clone(),
             SessionOptions {
                 persistence: Some(SessionPersistenceConfig::Json { folder: None }),
                 ..Default::default()
             },
         )
-        .await?;
+        .await
+        {
+            Ok(s) => s,
+            Err(e) => {
+                // The DHT reuses the UDP port stored in its cache, which Windows may later
+                // reserve (os error 10013). Retry once with a random port instead of failing.
+                warn!("session start failed ({e:#}); retrying with a random DHT port");
+                Session::new_with_opts(
+                    download_dir.clone(),
+                    SessionOptions {
+                        dht: Some(DhtSessionConfig {
+                            port: Some(0),
+                            ..Default::default()
+                        }),
+                        persistence: Some(SessionPersistenceConfig::Json { folder: None }),
+                        ..Default::default()
+                    },
+                )
+                .await?
+            }
+        };
         info!(
             "librqbit session started, download dir: {}",
             download_dir.display()
