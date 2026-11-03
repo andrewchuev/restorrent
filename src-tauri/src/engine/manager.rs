@@ -3,8 +3,9 @@ use std::path::PathBuf;
 use std::sync::{Arc, PoisonError, RwLock, RwLockReadGuard, RwLockWriteGuard};
 
 use librqbit::{
-    AddTorrent, AddTorrentOptions, AddTorrentResponse, Api, DhtSessionConfig, ManagedTorrent,
-    Session, SessionOptions, SessionPersistenceConfig, TorrentStats, TorrentStatsState,
+    AddTorrent, AddTorrentOptions, AddTorrentResponse, Api, DhtSessionConfig, Magnet,
+    ManagedTorrent, Session, SessionOptions, SessionPersistenceConfig, TorrentStats,
+    TorrentStatsState,
 };
 use serde::{Deserialize, Serialize};
 use tracing::{info, warn};
@@ -95,6 +96,9 @@ pub struct TorrentListing {
     pub name: String,
     pub output_folder: String,
     pub files: Vec<FileInfo>,
+    /// True when the torrent is already in the list; the caller should skip the
+    /// file-selection dialog and just point the user at the existing entry.
+    pub already_added: bool,
 }
 
 /// Inputs needed to derive `TorrentState`, decoupled from librqbit's `TorrentStats`
@@ -453,8 +457,31 @@ impl TorrentManager {
         Ok(info)
     }
 
+    /// Listing for a torrent that is already managed, or `None` if it is new.
+    fn existing_listing(&self, info_hash: &str) -> Option<TorrentListing> {
+        let guard = read_lock(&self.torrents);
+        let entry = guard.get(info_hash)?;
+        let info = build_info(info_hash, &entry.handle, &entry.save_path, entry.added_at);
+        Some(TorrentListing {
+            info_hash: info_hash.to_string(),
+            name: info.name,
+            output_folder: entry.save_path.clone(),
+            files: Vec::new(),
+            already_added: true,
+        })
+    }
+
     pub async fn list_magnet(&self, url: &str) -> Result<TorrentListing> {
         validate_source_url(url)?;
+        // The hash is in the link itself, so a duplicate is caught without waiting
+        // for metadata to resolve over DHT.
+        if let Some(listing) = Magnet::parse(url)
+            .ok()
+            .and_then(|m| m.as_id20())
+            .and_then(|id| self.existing_listing(&id.as_string()))
+        {
+            return Ok(listing);
+        }
         self.list_inner(AddTorrent::from_url(url)).await
     }
 
@@ -488,6 +515,9 @@ impl TorrentManager {
         };
 
         let info_hash = listing.info_hash.as_string();
+        if let Some(existing) = self.existing_listing(&info_hash) {
+            return Ok(existing);
+        }
         let name = listing
             .info
             .name()
@@ -520,6 +550,7 @@ impl TorrentManager {
             name,
             output_folder,
             files,
+            already_added: false,
         })
     }
 

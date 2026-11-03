@@ -160,20 +160,34 @@ const App: Component = () => {
 
   // ── Add pipeline: list → (user picks files in dialog) → confirm ──────────
 
+  const showAlreadyInList = (name: string) => {
+    setInfoMsg(`"${name}" is already in the list`);
+    setTimeout(() => setInfoMsg(""), 4000);
+  };
+
   const processNext = async () => {
     const source = addQueue.shift();
     if (!source) return;
     setListingBusy(true);
     setListingError("");
+    let duplicate = false;
     try {
       const listing =
         source.kind === "magnet" ? await listTorrentMagnet(source.value) : await listTorrentFile(source.path);
-      setPendingListing(listing);
+      if (listing.already_added) {
+        duplicate = true;
+        setSelectedId(listing.info_hash);
+        showAlreadyInList(listing.name);
+      } else {
+        setPendingListing(listing);
+      }
     } catch (e) {
       setListingError(String(e));
     } finally {
       setListingBusy(false);
     }
+    // No dialog to wait for, so move straight on to the next queued source.
+    if (duplicate) processNext();
   };
 
   const enqueueAdd = (source: TorrentSource) => {
@@ -282,8 +296,7 @@ const App: Component = () => {
 
   const handleAdded = (torrent: TorrentInfo) => {
     if (torrents.some(t => t.id === torrent.id)) {
-      setInfoMsg(`"${torrent.name}" is already in the queue`);
-      setTimeout(() => setInfoMsg(""), 4000);
+      showAlreadyInList(torrent.name);
     } else {
       setTorrents(reconcile([torrent, ...torrents], { key: "id", merge: true }));
     }

@@ -55,6 +55,7 @@ export interface TorrentListing {
   name: string;
   output_folder: string;
   files: FileInfo[];
+  already_added: boolean;
 }
 
 // A torrent source the user hasn't confirmed adding yet — magnet/URL text or a
