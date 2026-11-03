@@ -41,6 +41,15 @@
     "shortDescription": "Lightweight cross-platform BitTorrent client",
     "longDescription": "A fast and lightweight BitTorrent client built with Rust and Tauri. Supports magnet links, .torrent files, DHT, and system tray integration.",
     "category": "Utility",
+    "fileAssociations": [
+      {
+        "ext": ["torrent"],
+        "name": "BitTorrent File",
+        "description": "BitTorrent metainfo file",
+        "mimeType": "application/x-bittorrent",
+        "role": "Viewer"
+      }
+    ],
     "linux": {
       "deb": {
         "depends": []

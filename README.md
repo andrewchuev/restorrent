@@ -8,7 +8,7 @@ A lightweight, cross-platform BitTorrent client built with **Rust + Tauri 2** an
 
 ## Features
 
-- **Magnet links & .torrent files** — add torrents by URL, file picker, drag & drop, or paste from clipboard (`Ctrl+V` global shortcut)
+- **Magnet links & .torrent files** — add torrents by URL, file picker, drag & drop, or paste from clipboard (`Ctrl+V` global shortcut); installed builds also register as a handler for `.torrent` files, so opening one in Explorer adds it to the running app
 - **Choose what to download** — every add resolves the torrent's metadata first and shows a file/folder tree so you can pick exactly what to grab, with per-folder toggling and Check All / Uncheck All
 - **Real-time stats** — download/upload speed, progress, and peer count updated every second, with a live speed chart
 - **Resizable detail panel** — drag to resize, per-file progress bars, active peer list, and the speed chart for the selected torrent
