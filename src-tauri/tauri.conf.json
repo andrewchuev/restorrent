@@ -1,6 +1,6 @@
 {
   "productName": "resTorrent",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "identifier": "com.andrewchuev.rtorrent",
   "build": {
     "frontendDist": "../dist",
