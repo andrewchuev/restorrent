@@ -1,6 +1,6 @@
 # resTorrent
 
-A lightweight, cross-platform BitTorrent client built with **Rust + Tauri 2** and a **SolidJS** frontend.
+A lightweight, cross-platform BitTorrent client built with **Rust + Tauri 2** and a **SolidJS** frontend. Website: <https://restorrent.reslab.pro>
 
 [![Download](https://img.shields.io/github/v/release/andrewchuev/restorrent?label=Download&style=for-the-badge&color=2563eb&labelColor=333333)](https://github.com/andrewchuev/restorrent/releases/latest)
 
