@@ -24,7 +24,22 @@ A lightweight, cross-platform BitTorrent client built with **Rust + Tauri 2** an
 
 ## Screenshots
 
-> *Coming soon — contributions welcome!*
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/main-light.png">
+    <img src="docs/screenshots/main-dark.png" alt="rTorrent main window with downloads and seeding torrents" width="900">
+  </picture>
+</p>
+
+| Live speed chart and details | Pick exactly what to download |
+|:---:|:---:|
+| <img src="docs/screenshots/details-dark.png" alt="Detail panel with the live speed chart" width="440"> | <img src="docs/screenshots/add-torrent.png" alt="File selection dialog with a folder tree" width="440"> |
+
+| Settings and startup options | Light theme |
+|:---:|:---:|
+| <img src="docs/screenshots/settings.png" alt="Settings dialog" width="440"> | <img src="docs/screenshots/details-light.png" alt="Light theme with the detail panel" width="440"> |
+
+*The screenshots use demo data: freely distributable Linux ISOs and Blender open movies.*
 
 ---
 
