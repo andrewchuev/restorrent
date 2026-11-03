@@ -10,6 +10,7 @@ A lightweight, cross-platform BitTorrent client built with **Rust + Tauri 2** an
 
 - **Magnet links & .torrent files** — add torrents by URL, file picker, drag & drop, or paste from clipboard (`Ctrl+V` global shortcut); installed builds also register as a handler for `.torrent` files, so opening one in Explorer adds it to the running app
 - **Choose what to download** — every add resolves the torrent's metadata first and shows a file/folder tree so you can pick exactly what to grab, with per-folder toggling and Check All / Uncheck All
+- **No duplicates** — adding a torrent that is already in the list (by `.torrent` file or magnet link) skips the file dialog, selects the existing entry and shows a notice
 - **Real-time stats** — download/upload speed, progress, and peer count updated every second, with a live speed chart
 - **Resizable detail panel** — drag to resize, per-file progress bars, active peer list, and the speed chart for the selected torrent
 - **Multi-select** — Shift/Ctrl+click to select multiple torrents; bulk start/pause/stop/remove actions always available
@@ -42,6 +43,7 @@ Download the latest release for your platform from the [Releases](https://github
 - **macOS:** If you see *"unidentified developer"* — right-click the `.app` → **Open**.
 - **Windows:** SmartScreen may warn about an unknown publisher — click **More info → Run anyway**.
 - **Linux AppImage:** `chmod +x rtorrent_*.AppImage && ./rtorrent_*.AppImage`
+- **Opening `.torrent` files (Windows):** the installer registers rtorrent as a handler, but Windows 11 keeps your current default. Once, right-click a `.torrent` → **Open with → Choose another app → rtorrent → Always**. If the app is already running (even in the tray), the file is passed to it instead of starting a second copy.
 
 ---
 
@@ -96,14 +98,14 @@ Output is in `src-tauri/target/release/bundle/`.
 
 ## Release Process
 
-Releases are built automatically by GitHub Actions for all three platforms whenever a version tag is pushed:
+Releases are built automatically by GitHub Actions for all three platforms whenever a version tag is pushed. Bump the version first in `package.json`, `src-tauri/Cargo.toml`, `src-tauri/Cargo.lock` and `src-tauri/tauri.conf.json`, commit, then:
 
 ```bash
 git tag v1.0.0
-git push origin v1.0.0
+git push origin main v1.0.0
 ```
 
-The workflow produces a Draft GitHub Release with all platform installers attached.
+The workflow publishes a GitHub Release with all platform installers attached. Running the workflow manually (`workflow_dispatch`) creates a draft by default instead.
 
 ---
 
@@ -125,7 +127,7 @@ rtorrent/
 │       └── Settings.tsx        # Settings modal
 └── src-tauri/                  # Rust backend
     └── src/
-        ├── lib.rs              # App setup, tray, background stats emitter
+        ├── lib.rs              # App setup, single-instance handoff, tray, background stats emitter
         ├── engine/
         │   └── manager.rs      # TorrentManager wrapping librqbit Session
         ├── commands/
