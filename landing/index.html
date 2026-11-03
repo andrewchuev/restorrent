@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>resTorrent — a fast, lightweight BitTorrent client</title>
+<meta name="description" content="resTorrent is a free, open-source BitTorrent client for Windows, macOS and Linux. Pick exactly what to download, watch live speeds, and keep it quietly in your tray.">
+<link rel="canonical" href="https://rtorrent.reslab.pro/">
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+<link rel="icon" href="favicon.ico" sizes="any">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="resTorrent">
+<meta property="og:title" content="resTorrent — a fast, lightweight BitTorrent client">
+<meta property="og:description" content="Free and open source for Windows, macOS and Linux. Pick exactly what to download, watch live speeds, and keep it quietly in your tray.">
+<meta property="og:url" content="https://rtorrent.reslab.pro/">
+<meta property="og:image" content="https://rtorrent.reslab.pro/assets/shots/main-dark.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#09090b">
+<style>
+:root{--bg:#09090b;--panel:#111116;--line:#212129;--text:#f4f4f5;--muted:#a1a1aa;--accent:#6366f1;--accent2:#818cf8;--green:#10b981}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;z-index:10;background:rgba(9,9,11,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:650;font-size:18px}
+.brand img{width:30px;height:30px}
+nav .links{display:flex;align-items:center;gap:26px;color:var(--muted);font-size:14.5px}
+nav .links a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 24px;border-radius:12px;font-weight:600;font-size:15.5px;border:1px solid transparent;transition:.15s}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 8px 30px -8px rgba(99,102,241,.7)}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-ghost{border-color:var(--line);color:var(--text);background:rgba(255,255,255,.03)}
+.btn-ghost:hover{border-color:#3a3a46}
+.btn-sm{padding:9px 16px;font-size:14px;border-radius:10px}
+.hero{position:relative;padding:92px 0 40px;text-align:center;overflow:hidden}
+.hero::before{content:"";position:absolute;left:50%;top:-120px;width:900px;height:620px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(99,102,241,.38),transparent);filter:blur(30px);pointer-events:none}
+.pill{display:inline-flex;gap:8px;align-items:center;padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--muted);background:rgba(255,255,255,.03)}
+.pill b{color:var(--green);font-weight:600}
+h1{position:relative;font-size:clamp(38px,6vw,68px);line-height:1.07;letter-spacing:-.03em;font-weight:750;margin:22px auto 18px;max-width:860px}
+h1 span{background:linear-gradient(90deg,#a5b4fc,#6366f1 60%,#c084fc);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{position:relative;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:640px;margin:0 auto 32px}
+.cta{position:relative;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.meta{position:relative;margin-top:16px;color:#71717a;font-size:13px}
+.shot{position:relative;margin:56px auto 0;max-width:1000px;border:1px solid #2a2a33;border-radius:16px;background:var(--panel);padding:0;box-shadow:0 40px 120px -30px rgba(99,102,241,.45),0 0 0 6px rgba(255,255,255,.02)}
+.shot .bar{display:flex;gap:7px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.shot .bar i{width:11px;height:11px;border-radius:50%;background:#2e2e38}
+.shot img{display:block;width:100%;border-radius:0 0 15px 15px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:84px 0}
+.stats div{background:var(--bg);padding:26px 22px;text-align:center}
+.stats b{display:block;font-size:30px;letter-spacing:-.02em}
+.stats span{color:var(--muted);font-size:14px}
+section{padding:36px 0}
+h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.025em;line-height:1.15;text-align:center;font-weight:720}
+.sub{color:var(--muted);text-align:center;max-width:620px;margin:14px auto 44px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px;transition:.2s}
+.card:hover{border-color:#34344a;transform:translateY(-2px)}
+.card .ic{width:40px;height:40px;border-radius:11px;background:rgba(99,102,241,.14);color:var(--accent2);display:grid;place-items:center;margin-bottom:16px;font-weight:700}
+.card h3{font-size:17.5px;margin-bottom:6px}
+.card p{color:var(--muted);font-size:15px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.duo figure{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel)}
+.duo img{display:block;width:100%}
+.duo figcaption{padding:16px 20px;color:var(--muted);font-size:14.5px;border-top:1px solid var(--line)}
+.duo figcaption b{color:var(--text)}
+.dl{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.dl .card{display:flex;flex-direction:column;gap:6px}
+.dl .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+html[data-os="windows"] .dl .card.win,html[data-os="mac"] .dl .card.mac,html[data-os="linux"] .dl .card.lin{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.final{margin:56px 0 30px;text-align:center;padding:64px 24px;border:1px solid var(--line);border-radius:24px;background:radial-gradient(60% 120% at 50% 0,rgba(99,102,241,.25),transparent),var(--panel)}
+.final h2{margin-bottom:12px}
+footer{border-top:1px solid var(--line);margin-top:60px;padding:34px 0;color:#71717a;font-size:13.5px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer a:hover{color:var(--text)}
+@media(max-width:860px){.grid,.dl{grid-template-columns:1fr}.duo{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}nav .links a.hide{display:none}.hero{padding-top:60px}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="brand" href="#"><img src="assets/icon.svg" alt="">resTorrent</a>
+  <div class="links"><a class="hide" href="#features">Features</a><a class="hide" href="#download">Download</a><a class="hide" href="https://github.com/andrewchuev/restorrent">GitHub</a>
+    <a class="btn btn-primary btn-sm" data-dl="primary" href="https://github.com/andrewchuev/restorrent/releases/latest">Download</a></div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <span class="pill"><b>Free &amp; open source</b> · Windows, macOS, Linux</span>
+  <h1>A torrent client that <span>stays out of your way</span></h1>
+  <p class="lead">resTorrent is fast, tiny and beautifully simple. Choose exactly which files to download, watch live speeds, and let it live quietly in your tray.</p>
+  <div class="cta">
+    <a class="btn btn-primary" data-dl="primary" href="https://github.com/andrewchuev/restorrent/releases/latest"><span>Download for <span data-os-name>Windows</span></span></a>
+    <a class="btn btn-ghost" href="https://github.com/andrewchuev/restorrent">View on GitHub</a>
+  </div>
+  <p class="meta"><span data-version>v0.1.12</span> · <span data-size="primary">4.4 MB</span> · MIT licensed</p>
+  <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img src="assets/shots/main-dark.png" alt="resTorrent main window"></div>
+</div></header>
+
+<main class="wrap">
+  <div class="stats">
+    <div><b>&lt; 5 MB</b><span>Windows installer</span></div>
+    <div><b>Rust</b><span>engine and shell</span></div>
+    <div><b>3</b><span>platforms, one codebase</span></div>
+    <div><b>MIT</b><span>free forever</span></div>
+  </div>
+
+  <section id="features">
+    <h2>Everything you need. Nothing you don't.</h2>
+    <p class="sub">A focused feature set that does the basics exceptionally well.</p>
+    <div class="grid">
+      <div class="card"><div class="ic">01</div><h3>Pick files before you download</h3><p>Every torrent is resolved first and shown as a file tree, so you grab only what you want, with per-folder toggling.</p></div>
+      <div class="card"><div class="ic">02</div><h3>Live stats, every second</h3><p>Speed, progress, ETA and peers update in real time, with a speed chart for the selected torrent.</p></div>
+      <div class="card"><div class="ic">03</div><h3>Every way to add</h3><p>Magnet links, .torrent files, drag and drop, clipboard paste, or a double-click in your file manager. DHT works out of the box.</p></div>
+      <div class="card"><div class="ic">04</div><h3>Lives in your tray</h3><p>Close to tray, toggle with a click, launch with your system, and get notified when a download finishes.</p></div>
+      <div class="card"><div class="ic">05</div><h3>Light on resources</h3><p>Built with Rust and Tauri, so it starts instantly and sips memory instead of shipping a whole browser.</p></div>
+      <div class="card"><div class="ic">06</div><h3>Dark, light, your way</h3><p>Switch themes, zoom the interface, sort and multi-select, and set speed limits to match your connection.</p></div>
+    </div>
+    <div class="duo">
+      <figure><img src="assets/shots/add-torrent.png" alt="File selection"><figcaption><b>Choose files.</b> Untick what you don't need before a single byte is downloaded.</figcaption></figure>
+      <figure><img src="assets/shots/details-dark.png" alt="Speed chart"><figcaption><b>See everything.</b> Files, peers, details and a live speed chart for each torrent.</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="download">
+    <h2>Download resTorrent</h2>
+    <p class="sub">Version <span data-version>v0.1.12</span>. Pick your platform, install, and you're done.</p>
+    <div class="dl">
+      <div class="card win"><h3>Windows</h3><p>Windows 10 and 11, 64-bit</p><div class="row"><a class="btn btn-primary btn-sm" data-dl="windows" href="https://github.com/andrewchuev/restorrent/releases/latest">Installer .exe</a><a class="btn btn-ghost btn-sm" data-dl="msi" href="https://github.com/andrewchuev/restorrent/releases/latest">.msi</a></div></div>
+      <div class="card mac"><h3>macOS</h3><p>Universal: Intel and Apple Silicon</p><div class="row"><a class="btn btn-primary btn-sm" data-dl="mac" href="https://github.com/andrewchuev/restorrent/releases/latest">Download .dmg</a></div></div>
+      <div class="card lin"><h3>Linux</h3><p>Debian, Ubuntu and any distro</p><div class="row"><a class="btn btn-primary btn-sm" data-dl="appimage" href="https://github.com/andrewchuev/restorrent/releases/latest">AppImage</a><a class="btn btn-ghost btn-sm" data-dl="deb" href="https://github.com/andrewchuev/restorrent/releases/latest">.deb</a></div></div>
+    </div>
+    <div class="final">
+      <h2>Ready when you are</h2>
+      <p class="sub" style="margin-bottom:26px">Open source and free of ads, accounts and bundled extras.</p>
+      <div class="cta"><a class="btn btn-primary" data-dl="primary" href="https://github.com/andrewchuev/restorrent/releases/latest"><span>Download for <span data-os-name>Windows</span></span></a><a class="btn btn-ghost" href="https://github.com/andrewchuev/restorrent">Star on GitHub</a></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <span>© 2026 Andrew A. Chuev · MIT License</span>
+  <span><a href="https://github.com/andrewchuev/restorrent">GitHub</a> · <a href="https://github.com/andrewchuev/restorrent/releases">Releases</a> · <a href="https://github.com/andrewchuev/restorrent/issues">Issues</a></span>
+  <span>Please download and share only content you have the right to.</span>
+</div></footer>
+<script src="assets/site.js"></script>
+</body>
+</html>
